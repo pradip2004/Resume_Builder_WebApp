@@ -1,20 +1,25 @@
 import FormSection from '@/components/custom/FormSection';
 import PreviewSection from '@/components/custom/PreviewSection';
-import React, { useEffect } from 'react'
+import { ResumeContextInfo } from '@/context/ResumeContextInfo';
+import Dummy from '@/data/Dummy';
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 function EditResume() {
   const params = useParams();
+  const [resumeInfo, setResumeInfo] = useState();
 
-  useEffect(()=>(
-    console.log(params)
+  useEffect(() => (
+    setResumeInfo(Dummy)
   ), [])
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 p-10 gap-10'>
-      <FormSection />
+    <ResumeContextInfo.Provider value={{resumeInfo, setResumeInfo}}>
+      <div className='grid grid-cols-1 md:grid-cols-2 p-10 gap-10'>
+        <FormSection />
 
-      <PreviewSection />
-    </div>
+        <PreviewSection />
+      </div>
+    </ResumeContextInfo.Provider>
   )
 }
 

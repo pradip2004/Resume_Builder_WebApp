@@ -37,7 +37,7 @@ function AddResume() {
 
                   const resumeResponse = await axios.post('http://localhost:3000/api/v1/userResume', {
                         title: resumeTitle,
-                        email: user?.primaryEmailAddress?.emailAddress, // Send the user's email
+                        email: user?.primaryEmailAddress?.emailAddress, 
                   });
 
 

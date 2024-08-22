@@ -15,7 +15,7 @@ function Deshboard() {
   const getResumesList=()=>{
     GlobalApi.getUserResumes(user?.primaryEmailAddress?.emailAddress)
     .then(res=>{
-      // console.log(res.data.resumes)
+      console.log(res.data.resumes)
       setResumeList(res.data.resumes)
     })
   }
