@@ -3,15 +3,33 @@ import User from '../db/models/user.js'
 const router = express.Router();
 
 router.post('/', async (req, res)=>{
-      const {name, email} = req.body;
-      const user = await User.create({
-            name: name,
-            email: email,
-      });
-      console.log(user)
-      res.send({
-            message: 'user created'
-      })
+  const { name, email } = req.body;
+
+  try {
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      // If user exists, do nothing and return a message
+      return res.status(200).json({ message: 'User already exists', user: existingUser });
+    }
+
+    // If user does not exist, create a new one
+    const newUser = await User.create({
+      name: name,
+      email: email,
+    });
+
+    console.log(newUser);
+
+    res.status(201).json({
+      message: 'User created successfully',
+      user: newUser,
+    });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 })
 
 router.get('/', async (req, res) => {

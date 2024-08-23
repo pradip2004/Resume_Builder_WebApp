@@ -11,7 +11,7 @@ app.use(cors())
 app.use(express.json());
 app.use('/api/v1', rootRouter)
 
-const port = 4000
+// const port = 4000
 
 app.get('/', (req, res) => {
   res.send('Hello, World!')
@@ -19,6 +19,6 @@ app.get('/', (req, res) => {
 
 connectDB();
 
-app.listen(port, ()=>{
-      console.log(`Server is running on port ${process.env.PORT || port}`) 
+app.listen(process.env.PORT, ()=>{
+      console.log(`Server is running on port ${process.env.PORT}`) 
 })
