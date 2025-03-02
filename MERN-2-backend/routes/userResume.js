@@ -44,5 +44,27 @@ router.get('/', async (req, res)=>{
       }
 })
 
+router.put('/:resumeId', async (req, res)=>{
+      try {
+            const { resumeId } = req.params;
+            const updateData = req.body.data;
+    
+            if (!updateData) {
+                return res.status(400).json({ message: "No data provided for update." });
+            }
+    
+            const updatedResume = await UserResume.findByIdAndUpdate(resumeId, updateData, { new: true, runValidators: true });
+    
+            if (!updatedResume) {
+                return res.status(404).json({ message: "Resume not found." });
+            }
+    
+            res.status(200).json({ message: "Resume updated successfully.", updatedResume });
+        } catch (error) {
+            console.error("Error updating resume:", error);
+            res.status(500).json({ message: "Internal Server Error.", error: error.message });
+        }
+})
+
 
 export default router
