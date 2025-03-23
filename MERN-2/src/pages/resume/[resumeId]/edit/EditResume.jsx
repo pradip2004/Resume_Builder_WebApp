@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom'
 function EditResume() {
   const params = useParams();
   const [resumeInfo, setResumeInfo] = useState();
+  
 
   useEffect(() => (
     setResumeInfo(Dummy)

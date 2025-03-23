@@ -3,6 +3,8 @@ import PersonalDetails from './FormSection/PersonalDetails'
 import { Button } from '../ui/button'
 import { ArrowLeft, ArrowRight, LayoutGrid } from 'lucide-react'
 import Summary from './FormSection/Summary';
+import Experience from './FormSection/Experience';
+import Education from './FormSection/Education';
 
 function FormSection() {
 
@@ -28,14 +30,11 @@ function FormSection() {
         </div>
       </div>
       {/* personal details  */}
-      {activeFormIndex == 1 ? <PersonalDetails enableNext={(v)=>setEnableNext(v)}/> : null}
-      {/* summary  */}
-      {activeFormIndex == 2 ? <Summary enableNext={(v)=>setEnableNext(v)}/> : null}
-      {/* Experience  */}
-
-      {/* Educational Details  */}
-
-      {/* Skills  */}
+      {activeFormIndex == 1 ? <PersonalDetails enableNext={(v)=>setEnableNext(v)}/> : 
+      activeFormIndex == 2 ? <Summary enableNext={(v)=>setEnableNext(v)}/> : 
+      activeFormIndex == 3 ? <Experience enableNext={(v)=>setEnableNext(v)}/> : 
+      activeFormIndex == 4 ? <Education enableNext={(v)=>setEnableNext(v)}/> : null}
+      
     </div>
   )
 }
