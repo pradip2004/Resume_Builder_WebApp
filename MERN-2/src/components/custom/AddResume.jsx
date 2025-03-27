@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useUser } from '@clerk/clerk-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+
 function AddResume() {
       const [open, setOpen] = useState(false)
       const [resumeTitle, setResumeTitle] = useState()
@@ -52,9 +53,9 @@ function AddResume() {
 
       return (
             <div>
-                  <div className='px-16 py-32 bg-gray-400 flex items-center justify-center rounded-lg hover:scale-105 hover:shadow-lg cursor-pointer border-dashed transition-all h-[240px]' onClick={() => setOpen(true)}>
-
-                        <PlusCircleIcon />
+                  <div className='relative px-16 py-32 bg-gradient-to-r from-[#74ebd5] to-[#acb6e5] flex flex-col items-center justify-center rounded-lg hover:scale-105 hover:shadow-lg cursor-pointer border-black transition-all h-[240px]' onClick={() => setOpen(true)}>
+                        <PlusCircleIcon className='w-10 h-10 text-gray-600 mb-4' />
+                        <h2 className='text-center text-gray-600 text-lg font-medium'>Create New Resume</h2>
                   </div>
 
                   <Dialog open={open}>

@@ -23,9 +23,23 @@ const experienceSchema = new Schema({
   });
   
   const skillsSchema = new Schema({
+      category: { type: String, required: true },
+      items: [{ type: String, required: true }]
+  });
+
+  const achievementSchema = new Schema({
       id: { type: Number, required: true },
-      name: { type: String, required: true },
-      rating: { type: Number, required: true }
+      title: { type: String, required: true },
+      description: { type: String, required: true },
+      date: { type: String, required: true }
+  });
+
+  const certificateSchema = new Schema({
+      id: { type: Number, required: true },
+      title: { type: String, required: true },
+      issuer: { type: String, required: true },
+      date: { type: String, required: true },
+      link: { type: String, required: true }
   });
   
   const userResumeSchema = new Schema({
@@ -40,6 +54,8 @@ const experienceSchema = new Schema({
       experience: [experienceSchema],
       education: [educationSchema],
       skills: [skillsSchema],
+      achievements: [achievementSchema],
+      certificates: [certificateSchema],
       title: { type: String, required: true }
   });
   

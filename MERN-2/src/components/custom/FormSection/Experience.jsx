@@ -10,15 +10,16 @@ import { useParams } from 'react-router-dom';
 
 
 const formField={
+      id: 0,
       title:'',
       companyName:'',
       city:'',
       state:'',
       startDate:'',
       endDate:'',
+      currentlyWorking: false,
       workSummery:'',
-  
-  }
+}
 
 
 function Experience({enableNext}) {
@@ -29,26 +30,29 @@ function Experience({enableNext}) {
   
       useEffect(()=>{
           resumeInfo?.experience.length>0&&setExperinceList(resumeInfo?.experience)
-          
       },[])
   
       const handleChange=(index,event)=>{
           const newEntries=experinceList.slice();
-          const {name,value}=event.target;
-          newEntries[index][name]=value;
-          console.log(newEntries)
+          const {name,value,type,checked}=event.target;
+          newEntries[index][name]=type === 'checkbox' ? checked : value;
           setExperinceList(newEntries);
       }
   
       const AddNewExperience=()=>{
-      
+          const newId = experinceList.length > 0 
+              ? Math.max(...experinceList.map(exp => exp.id)) + 1 
+              : 1;
+          
           setExperinceList([...experinceList,{
+              id: newId,
               title:'',
               companyName:'',
               city:'',
               state:'',
               startDate:'',
               endDate:'',
+              currentlyWorking: false,
               workSummery:'',
           }])
       }
@@ -77,20 +81,18 @@ function Experience({enableNext}) {
           setLoading(true)
           const data={
               data:{
-                  experience:experinceList.map(({ id, ...rest }) => rest)
+                  experience:experinceList
               }
           }
-  
-           console.log(experinceList)
   
           GlobalApi.updateResumeDetail(params?.resumeId,data).then(res=>{
               console.log(res);
               setLoading(false);
               toast('Details updated !')
           },(error)=>{
+              toast('Details update failed !')
               setLoading(false);
           })
-  
       }
   return (
       <div>
@@ -139,7 +141,18 @@ function Experience({enableNext}) {
                           <Input type="date" name="endDate" 
                           onChange={(event)=>handleChange(index,event)} 
                           defaultValue={item?.endDate}
+                          disabled={item?.currentlyWorking}
                           />
+                      </div>
+                      <div className='col-span-2 flex items-center gap-2'>
+                          <input 
+                              type="checkbox" 
+                              name="currentlyWorking" 
+                              checked={item?.currentlyWorking}
+                              onChange={(event)=>handleChange(index,event)}
+                              className="h-4 w-4"
+                          />
+                          <label className='text-xs'>Currently Working</label>
                       </div>
                       <div className='col-span-2'>
                          {/* Work Summery  */}

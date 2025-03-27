@@ -5,7 +5,7 @@ import SummaryPreview from './SummaryPreview'
 import ExperiencePreview from './ExperiencePreview'
 import EducaationalPreview from './EducaationalPreview'
 import SkillsPreview from './SkillsPreview'
-
+import AchievementsPreview from './AchievementsPreview'
 function PreviewSection() {
   const {resumeInfo, setResumeInfo} = useContext(ResumeContextInfo)
   return (
@@ -19,6 +19,8 @@ function PreviewSection() {
       <EducaationalPreview resumeInfo={resumeInfo} />
 
       <SkillsPreview resumeInfo={resumeInfo} />
+
+      <AchievementsPreview resumeInfo={resumeInfo} />
     </div>
   )
 }

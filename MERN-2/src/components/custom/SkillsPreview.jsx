@@ -12,18 +12,24 @@ function SkillsPreview({ resumeInfo }) {
                         borderColor: resumeInfo?.themeColor
                   }} />
 
-                  <div className='grid grid-cols-2 gap-3 my-4'>
-                        {resumeInfo?.skills.map((skill, index) => (
-                              <div key={index} className='flex items-center justify-between'>
-                                    <h2 className='text-xs font-medium'>{skill.name}</h2>
-                                    <div className='h-2 bg-gray-200 w-[120px] rounded-md overflow-hidden'>
-                                          <div className='h-2'
-                                                style={{
-                                                      backgroundColor: resumeInfo?.themeColor,
-                                                      width: skill?.rating + '%'
-                                                }}
-                                          >
-                                          </div>
+                  {/* Skills Categories */}
+                  <div className='flex flex-wrap gap-4 my-4'>
+                        {resumeInfo?.skills?.map((category, index) => (
+                              <div key={index} className='flex items-center gap-2'>
+                                    <h3 className='text-sm font-semibold whitespace-nowrap'
+                                          style={{
+                                                color: resumeInfo?.themeColor
+                                          }}
+                                    >
+                                          {category.category}:
+                                    </h3>
+                                    <div className='flex flex-wrap gap-2'>
+                                          {category.items.map((item, itemIndex) => (
+                                                <span key={itemIndex} 
+                                                      className='text-xs px-2 py-1 rounded-full bg-gray-100'>
+                                                      {item}
+                                                </span>
+                                          ))}
                                     </div>
                               </div>
                         ))}

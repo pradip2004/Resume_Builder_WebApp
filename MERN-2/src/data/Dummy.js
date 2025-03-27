@@ -61,26 +61,52 @@ export default{
               description:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud'
           }
       ],
-      skills:[
+      skills: [
           {
-              id:1,
-              name:'Angular',
-              rating:80,
+              category: 'Frontend',
+              items: ['HTML', 'CSS', 'JavaScript', 'React', 'Angular', 'Vue.js']
           },
           {
-              id:1,
-              name:'React',
-              rating:100,
+              category: 'Backend',
+              items: ['Node.js', 'Express', 'Python', 'Java', 'PHP']
           },
           {
-              id:1,
-              name:'MySql',
-              rating:80,
+              category: 'Database',
+              items: ['MySQL', 'MongoDB', 'PostgreSQL', 'Redis']
           },
           {
-              id:1,
-              name:'React Native',
-              rating:100,
+              category: 'Tools & Others',
+              items: ['Git', 'Docker', 'AWS', 'Jest', 'Webpack']
+          }
+      ],
+      achievements: [
+          {
+              id: 1,
+              title: 'Best Employee Award',
+              description: 'Received recognition for outstanding performance and innovation in developing a new feature that increased user engagement by 40%',
+              date: 'Dec 2022'
+          },
+          {
+              id: 2,
+              title: 'Project Excellence',
+              description: 'Led a team of 5 developers to successfully deliver a critical project 2 weeks ahead of schedule',
+              date: 'Mar 2022'
+          }
+      ],
+      certificates: [
+          {
+              id: 1,
+              title: 'AWS Certified Solutions Architect',
+              issuer: 'Amazon Web Services',
+              date: 'Jan 2023',
+              link: 'https://aws.amazon.com/certification/'
+          },
+          {
+              id: 2,
+              title: 'Professional Scrum Master I',
+              issuer: 'Scrum.org',
+              date: 'Jun 2022',
+              link: 'https://www.scrum.org/'
           }
       ]
   }

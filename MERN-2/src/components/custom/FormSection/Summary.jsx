@@ -11,16 +11,16 @@ import { toast } from 'sonner'
 const prompt = "job title: {jobTitle}, Depends on job title give me list of  summery for 3 experience level, Mid Level and Freasher level in 3 -4 lines in array format, With summery and experience_level Field in JSON Format"
 function Summary({ enableNext }) {
   const { resumeInfo, setResumeInfo } = useContext(ResumeContextInfo)
-  const [summery, setSummery] = useState()
+  const [summery, setSummery] = useState('')
   const [loading, setLoading] = useState(false);
   const [aiGeneratedSummery, setAIGeneratedSummery] = useState()
   const params = useParams();
+
   useEffect(() => {
-    summery && setResumeInfo({
-      ...resumeInfo,
-      summery: summery
-    })
-  }, [summery])
+    if (resumeInfo?.summery) {
+      setSummery(resumeInfo.summery);
+    }
+  }, [resumeInfo]);
 
   const GenerateSummeryFromAI = async ()=>{
     setLoading(true)
@@ -33,7 +33,6 @@ function Summary({ enableNext }) {
 
   const onSave = (e) => {
     e.preventDefault()
-
     setLoading(true)
     const data = {
       data: {
@@ -41,7 +40,10 @@ function Summary({ enableNext }) {
       }
     }
     GlobalApi.updateResumeDetail(params?.resumeId, data).then(resp => {
-      console.log(resp);
+      setResumeInfo(prev => ({
+        ...prev,
+        summery: summery
+      }));
       enableNext(true);
       setLoading(false);
       toast("Details updated")
@@ -49,6 +51,7 @@ function Summary({ enableNext }) {
       setLoading(false);
     })
   }
+
   return (
     <div>
       <div className='p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10'>
@@ -63,8 +66,7 @@ function Summary({ enableNext }) {
               <Brain className='h-4 w-4' />  Generate from AI</Button>
           </div>
           <Textarea className="mt-5" required
-          value={summery}
-          defaultValue={summery?summery:resumeInfo?.summery}
+            value={summery}
             onChange={(e) => setSummery(e.target.value)}
           />
           <div className='mt-2 flex justify-end'>
@@ -72,7 +74,6 @@ function Summary({ enableNext }) {
             disabled={loading}
             >
               {loading?<LoaderCircle className='animate-spin' />:'Save'}
-              
             </Button>
           </div>
         </form>

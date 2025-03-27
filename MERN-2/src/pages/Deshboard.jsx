@@ -20,15 +20,23 @@ function Deshboard() {
     })
   }
 
+  const handleDelete = (deletedResumeId) => {
+    setResumeList(prevResumes => prevResumes.filter(resume => resume._id !== deletedResumeId));
+  }
+
   return (
     <div className='w-full mt-10'>
       <div className='max-w-screen-xl p-4 mx-auto'>
-        <h1 className='text-5xl font-semibold'>My Resume</h1>
-        <p className='text-md mt-3 font-medium'>Start creating Resume for your next job role</p>
+        <h1 className='text-5xl font-semibold dark:text-white'>My Resume</h1>
+        <p className='text-md mt-3 font-medium dark:text-gray-300'>Start creating Resume for your next job role</p>
         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-10 gap-x-5 gap-y-10'>
           <AddResume />
           {resumeList.length > 0 && resumeList.map((resume, index)=>(
-            <ReusmeCard resume={resume} key={index} />
+            <ReusmeCard 
+              resume={resume} 
+              key={index} 
+              onDelete={handleDelete}
+            />
           ))}
         </div>
       </div>
