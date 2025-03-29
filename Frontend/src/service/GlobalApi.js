@@ -2,7 +2,7 @@ import axios from "axios";
 import Dummy from '@/data/Dummy';
 
 const axiosClient = axios.create({
-      baseURL: 'http://localhost:3000/api/v1/'
+      baseURL: import.meta.env.VITE_BASE_URL
 })
 
 const getUserResumes = (email) => axiosClient.get('/userResume', {
