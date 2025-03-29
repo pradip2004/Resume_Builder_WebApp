@@ -63,16 +63,54 @@ AI_Resume_Builder/
 ### Frontend (.env)
 ```
 VITE_API_URL=http://localhost:3000
-VITE_GOOGLE_AI_API_KEY==your_googleai_api_key
-VITE_CLERK_PUBLISHABLE_KEY=
+VITE_GOOGLE_AI_API_KEY=your_googleai_api_key
+VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+VITE_CLERK_SIGN_IN_URL=/sign-in
+VITE_CLERK_SIGN_UP_URL=/sign-up
+VITE_CLERK_AFTER_SIGN_IN_URL=/
+VITE_CLERK_AFTER_SIGN_UP_URL=/
 ```
 
 ### Backend (.env)
 ```
 PORT=3000
 MONGO_URL=your_mongodb_connection_string
+CLERK_SECRET_KEY=your_clerk_secret_key
 
 ```
+
+## Deployment Notes
+
+### Clerk Authentication Setup
+
+1. **Clerk Dashboard Configuration**:
+   - Go to [Clerk Dashboard](https://dashboard.clerk.dev)
+   - Select your application
+   - Navigate to "JWT Templates"
+   - Create a new template for your application
+   - Set the signing algorithm to "RS256"
+   - Add your backend URL to the allowed origins
+
+2. **Environment Variables**:
+   - Ensure all Clerk environment variables are properly set in your deployment platform
+   - Frontend variables should be prefixed with `VITE_`
+   - Backend variables should be set without any prefix
+
+3. **CORS Configuration**:
+   - Add your frontend domain to the allowed origins in Clerk dashboard
+   - Configure your backend to accept requests from your frontend domain
+
+4. **Common Issues**:
+   - If authentication is not working after deployment:
+     - Verify all environment variables are correctly set
+     - Check if the Clerk publishable key matches your application
+     - Ensure your domain is added to Clerk's allowed origins
+     - Verify the JWT template is properly configured
+
+5. **Development vs Production**:
+   - Use different Clerk applications for development and production
+   - Update environment variables accordingly
+   - Test authentication flow in both environments
 
 ## API Routes
 
