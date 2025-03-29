@@ -9,7 +9,12 @@ import Deshboard from './pages/Deshboard.jsx'
 import { ClerkProvider } from '@clerk/clerk-react'
 import EditResume from './pages/resume/[resumeId]/edit/EditResume.jsx'
 import ViewResume from './pages/ViewResume.jsx'
+
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error("Missing Clerk Publishable Key")
+}
 
 const router = createBrowserRouter([
   {
@@ -41,7 +46,19 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    <ClerkProvider 
+      publishableKey={PUBLISHABLE_KEY}
+      afterSignOutUrl="/"
+      appearance={{
+        baseTheme: undefined,
+        variables: {
+          colorPrimary: '#000000',
+          colorBackground: '#ffffff',
+          colorInputBackground: '#ffffff',
+          colorAlphaShade: 'rgb(0 0 0 / 0.1)',
+        },
+      }}
+    >
       <RouterProvider router={router} />
     </ClerkProvider>
   </StrictMode>,
