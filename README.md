@@ -2,6 +2,8 @@
 
 A modern, AI-powered resume builder application built with the MERN stack (MongoDB, Express.js, React.js, Node.js). Create professional resumes with ease using AI assistance and a beautiful, intuitive interface.
 
+🌐 **Live Demo**: [resumegpt.netlify.app](https://resumegpt.netlify.app)
+
 ## Description
 
 AI Resume Builder is a full-stack application that helps users create professional resumes with the assistance of AI. The application features a modern UI, real-time preview, and AI-powered content suggestions. Users can customize their resumes with different themes, sections, and layouts.
