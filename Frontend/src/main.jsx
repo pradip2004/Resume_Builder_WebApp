@@ -49,15 +49,6 @@ createRoot(document.getElementById('root')).render(
     <ClerkProvider 
       publishableKey={PUBLISHABLE_KEY}
       afterSignOutUrl="/"
-      appearance={{
-        baseTheme: undefined,
-        variables: {
-          colorPrimary: '#000000',
-          colorBackground: '#ffffff',
-          colorInputBackground: '#ffffff',
-          colorAlphaShade: 'rgb(0 0 0 / 0.1)',
-        },
-      }}
     >
       <RouterProvider router={router} />
     </ClerkProvider>
