@@ -24,19 +24,19 @@ function AddResume() {
       const onCreate = async () => {
             setLoading(true)
             try {
-                  const existingUserResponse = await axios.get('http://localhost:3000/api/v1/user', {
+                  const existingUserResponse = await axios.get(`${import.meta.env.VITE_BASE_URL}user`, {
                         params: { email: user.primaryEmailAddress?.emailAddress }
                   });
 
                   if (!existingUserResponse.data) {
-                        await axios.post('http://localhost:3000/api/v1/user', {
+                        await axios.post(`${import.meta.env.VITE_BASE_URL}user`, {
                               name: user?.fullName,
                               email: user.primaryEmailAddress?.emailAddress,
                         });
                   }
 
 
-                  const resumeResponse = await axios.post('http://localhost:3000/api/v1/userResume', {
+                  const resumeResponse = await axios.post(`${import.meta.env.VITE_BASE_URL}userResume`, {
                         title: resumeTitle,
                         email: user?.primaryEmailAddress?.emailAddress, 
                   });
