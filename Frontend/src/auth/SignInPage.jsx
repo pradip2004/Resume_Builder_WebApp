@@ -34,6 +34,8 @@ function SignInPage() {
             {
               name: name,
               email: email,
+              externalId: user.id,
+              externalProvider: user.externalAccounts?.[0]?.provider || 'clerk',
             },
             {
               headers: {
@@ -83,6 +85,8 @@ function SignInPage() {
           signUpUrl="/auth/signup"
           afterSignInUrl="/dashboard"
           afterSignUpUrl="/dashboard"
+          redirectUrl={window.location.origin}
+          redirectUrlComplete={window.location.origin}
         />
       </div>
     </div>
