@@ -8,7 +8,13 @@ import { requireAuth } from './middleware/auth.js';
 dotenv.config();
 
 const app = express()
-app.use(cors())
+
+// Configure CORS with specific options
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Apply Clerk authentication middleware to all routes under /api/v1
@@ -18,6 +24,12 @@ app.use('/api/v1', requireAuth, rootRouter)
 app.get('/', (req, res) => {
   res.send('Hello, World!')
 })
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
+});
 
 connectDB();
 

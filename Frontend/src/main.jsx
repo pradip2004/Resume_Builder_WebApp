@@ -39,6 +39,14 @@ const router = createBrowserRouter([
     element: <SignInPage />
   },
   {
+    path: '/auth/signin/sso-callback',
+    element: <SignInPage />
+  },
+  {
+    path: '/auth/signup',
+    element: <SignInPage />
+  },
+  {
     path: '/my-resume/:resumeId/view',
     element: <ViewResume />
   }
@@ -48,7 +56,20 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ClerkProvider 
       publishableKey={PUBLISHABLE_KEY}
-      afterSignOutUrl="/"
+      appearance={{
+        baseTheme: undefined,
+        variables: {
+          colorBackground: '#ffffff',
+          colorInputBackground: '#ffffff',
+          colorAlphaShade: 'rgba(0, 0, 0, 0.08)',
+        },
+      }}
+      routing={{
+        signInUrl: '/auth/signin',
+        signUpUrl: '/auth/signup',
+        afterSignInUrl: '/dashboard',
+        afterSignUpUrl: '/dashboard',
+      }}
     >
       <RouterProvider router={router} />
     </ClerkProvider>
