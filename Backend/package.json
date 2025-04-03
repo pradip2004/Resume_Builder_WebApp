@@ -12,9 +12,12 @@
   "description": "",
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.1.6",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "google-auth-library": "^9.15.1",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.3"
   }
 }

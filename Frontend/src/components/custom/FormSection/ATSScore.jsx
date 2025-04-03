@@ -2,16 +2,24 @@ import React, { useContext, useState } from 'react'
 import { AIChatSession } from '@/service/AIModel'
 import GlobalApi from '@/service/GlobalApi'
 import { ResumeContextInfo } from '@/context/ResumeContextInfo'
+import { toast } from 'sonner'
 
 const ATSScore = () => {
       const [score, setScore] = useState(null)
       const [suggestions, setSuggestions] = useState([])
       const [loading, setLoading] = useState(false)
+      const [error, setError] = useState(null)
       const { resumeInfo, setResumeInfo } = useContext(ResumeContextInfo)
 
       const analyzeResume = async () => {
             try {
                   setLoading(true)
+                  setError(null)
+                  
+                  if (!resumeInfo) {
+                        throw new Error('No resume data available')
+                  }
+
                   // Convert resume data to string for analysis
                   const resumeText = JSON.stringify(resumeInfo)
                   
@@ -30,11 +38,23 @@ const ATSScore = () => {
                         }
                   `)
 
+                  if (!result?.response?.text()) {
+                        throw new Error('Failed to get analysis from AI')
+                  }
+
                   const response = JSON.parse(result.response.text())
+                  
+                  if (!response.score || !response.suggestions) {
+                        throw new Error('Invalid response format from AI')
+                  }
+
                   setScore(response.score)
                   setSuggestions(response.suggestions)
+                  toast.success('Analysis completed successfully')
             } catch (error) {
                   console.error('Error analyzing resume:', error)
+                  setError(error.message || 'Failed to analyze resume')
+                  toast.error(error.message || 'Failed to analyze resume')
             } finally {
                   setLoading(false)
             }
@@ -45,9 +65,15 @@ const ATSScore = () => {
                   <h2 className='font-bold text-lg mb-4'>ATS Score</h2>
                   <p className='mb-4'>Get your resume score and suggestions to improve ATS compatibility</p>
                   
+                  {error && (
+                        <div className="text-red-500 mb-4 p-3 bg-red-50 rounded">
+                              {error}
+                        </div>
+                  )}
+                  
                   <button 
                         onClick={analyzeResume}
-                        disabled={loading}
+                        disabled={loading || !resumeInfo}
                         className='bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50'
                   >
                         {loading ? 'Analyzing...' : 'Analyze Resume'}

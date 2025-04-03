@@ -25,30 +25,54 @@ function Achievement({ enableNext }) {
   }, [resumeInfo])
 
   const addAchievement = () => {
-    setAchievements([...achievements, {
+    const newAchievement = {
       title: '',
       description: '',
       date: ''
-    }])
+    }
+    const updatedAchievements = [...achievements, newAchievement]
+    setAchievements(updatedAchievements)
+    // Update context immediately for preview
+    setResumeInfo(prev => ({
+      ...prev,
+      achievements: updatedAchievements
+    }))
   }
 
   const addCertificate = () => {
-    setCertificates([...certificates, {
+    const newCertificate = {
       title: '',
       issuer: '',
       date: '',
       link: ''
-    }])
+    }
+    const updatedCertificates = [...certificates, newCertificate]
+    setCertificates(updatedCertificates)
+    // Update context immediately for preview
+    setResumeInfo(prev => ({
+      ...prev,
+      certificates: updatedCertificates
+    }))
   }
 
   const removeAchievement = (index) => {
     const newAchievements = achievements.filter((_, i) => i !== index)
     setAchievements(newAchievements)
+    // Update context immediately for preview
+    setResumeInfo(prev => ({
+      ...prev,
+      achievements: newAchievements
+    }))
   }
 
   const removeCertificate = (index) => {
     const newCertificates = certificates.filter((_, i) => i !== index)
     setCertificates(newCertificates)
+    // Update context immediately for preview
+    setResumeInfo(prev => ({
+      ...prev,
+      certificates: newCertificates
+    }))
   }
 
   const updateAchievement = (index, field, value) => {
@@ -58,6 +82,11 @@ function Achievement({ enableNext }) {
       [field]: value
     }
     setAchievements(newAchievements)
+    // Update context immediately for preview
+    setResumeInfo(prev => ({
+      ...prev,
+      achievements: newAchievements
+    }))
   }
 
   const updateCertificate = (index, field, value) => {
@@ -67,31 +96,41 @@ function Achievement({ enableNext }) {
       [field]: value
     }
     setCertificates(newCertificates)
+    // Update context immediately for preview
+    setResumeInfo(prev => ({
+      ...prev,
+      certificates: newCertificates
+    }))
   }
 
-  const onSave = () => {
+  const onSave = async () => {
     setLoading(true)
-    const data = {
-      data: {
-        achievements: achievements,
-        certificates: certificates
+    try {
+      const data = {
+        data: {
+          achievements: achievements,
+          certificates: certificates
+        }
       }
-    }
 
-    GlobalApi.updateResumeDetail(params?.resumeId, data).then(res => {
-      console.log(res)
-      setResumeInfo({
-        ...resumeInfo,
-        achievements: achievements,
-        certificates: certificates
-      })
-      enableNext(true)
+      const response = await GlobalApi.updateResumeDetail(params?.resumeId, data)
+      if (response.data) {
+        setResumeInfo(prev => ({
+          ...prev,
+          achievements: achievements,
+          certificates: certificates
+        }))
+        enableNext(true)
+        toast.success("Details updated successfully")
+      } else {
+        throw new Error('Failed to update details')
+      }
+    } catch (error) {
+      console.error('Error updating details:', error)
+      toast.error(error.message || 'Failed to update details')
+    } finally {
       setLoading(false)
-      toast("Details updated successfully")
-    }, (error) => {
-      setLoading(false)
-      toast("Error updating details")
-    })
+    }
   }
 
   return (
@@ -122,6 +161,7 @@ function Achievement({ enableNext }) {
                   value={achievement.title}
                   onChange={(e) => updateAchievement(index, 'title', e.target.value)}
                   placeholder="Enter achievement title"
+                  required
                 />
               </div>
               <div>
@@ -130,6 +170,7 @@ function Achievement({ enableNext }) {
                   value={achievement.description}
                   onChange={(e) => updateAchievement(index, 'description', e.target.value)}
                   placeholder="Enter achievement description"
+                  required
                 />
               </div>
               <div>
@@ -138,6 +179,7 @@ function Achievement({ enableNext }) {
                   type="date"
                   value={achievement.date}
                   onChange={(e) => updateAchievement(index, 'date', e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -168,6 +210,7 @@ function Achievement({ enableNext }) {
                   value={certificate.title}
                   onChange={(e) => updateCertificate(index, 'title', e.target.value)}
                   placeholder="Enter certificate title"
+                  required
                 />
               </div>
               <div>
@@ -176,6 +219,7 @@ function Achievement({ enableNext }) {
                   value={certificate.issuer}
                   onChange={(e) => updateCertificate(index, 'issuer', e.target.value)}
                   placeholder="Enter certificate issuer"
+                  required
                 />
               </div>
               <div>
@@ -184,6 +228,7 @@ function Achievement({ enableNext }) {
                   type="date"
                   value={certificate.date}
                   onChange={(e) => updateCertificate(index, 'date', e.target.value)}
+                  required
                 />
               </div>
               <div>

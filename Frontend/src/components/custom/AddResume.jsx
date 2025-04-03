@@ -11,36 +11,32 @@ import {
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { v4 as uuidv4 } from 'uuid';
-import { useUser } from '@clerk/clerk-react';
-import axios from 'axios';
+import GlobalApi from '@/service/GlobalApi';
 import { useNavigate } from 'react-router-dom'
 
 function AddResume() {
       const [open, setOpen] = useState(false)
       const [resumeTitle, setResumeTitle] = useState()
-      const { user } = useUser();
       const [loading, setLoading] = useState(false)
       const navigate = useNavigate();
+      const [user, setUser] = useState(null);
+
+      useEffect(() => {
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                  setUser(JSON.parse(storedUser));
+            }
+      }, []);
+
       const onCreate = async () => {
+            if (!user) return;
+            
             setLoading(true)
             try {
-                  const existingUserResponse = await axios.get(`${import.meta.env.VITE_BASE_URL}user`, {
-                        params: { email: user.primaryEmailAddress?.emailAddress }
-                  });
-
-                  if (!existingUserResponse.data) {
-                        await axios.post(`${import.meta.env.VITE_BASE_URL}user`, {
-                              name: user?.fullName,
-                              email: user.primaryEmailAddress?.emailAddress,
-                        });
-                  }
-
-
-                  const resumeResponse = await axios.post(`${import.meta.env.VITE_BASE_URL}userResume`, {
+                  const resumeResponse = await GlobalApi.createResume({
                         title: resumeTitle,
-                        email: user?.primaryEmailAddress?.emailAddress, 
+                        email: user.email
                   });
-
 
                   console.log('Resume created successfully', resumeResponse.data);
                   setOpen(false);
@@ -48,6 +44,7 @@ function AddResume() {
                   navigate('/dashboard/resume/'+resumeResponse.data.resumeId+"/edit")
             } catch (error) {
                   console.error('Error creating resume:', error);
+                  setLoading(false);
             }
       }
 
@@ -73,7 +70,6 @@ function AddResume() {
                                           </Button>
                                     </div>
                               </DialogHeader>
-
                         </DialogContent>
                   </Dialog>
             </div>

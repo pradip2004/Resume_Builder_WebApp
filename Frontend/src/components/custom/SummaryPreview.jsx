@@ -2,9 +2,12 @@ import React from 'react'
 
 function SummaryPreview({resumeInfo}) {
   return (
-    <p className='text-xs'>
-      {resumeInfo?.summery}
-    </p>
+    <div className="mt-4">
+      <h2 className="text-lg font-semibold mb-2">Professional Summary</h2>
+      <p className="text-sm leading-relaxed">
+        {resumeInfo?.summary || 'No summary provided'}
+      </p>
+    </div>
   )
 }
 

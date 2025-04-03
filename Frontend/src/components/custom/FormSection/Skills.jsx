@@ -6,7 +6,7 @@ import GlobalApi from '@/service/GlobalApi';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
-const Skills = () => {
+const Skills = ({ enableNext }) => {
       const { resumeInfo, setResumeInfo } = useContext(ResumeContextInfo);
       const [loading, setLoading] = useState(false);
       const params = useParams();
@@ -19,7 +19,13 @@ const Skills = () => {
       }, [resumeInfo]);
 
       const addNewCategory = () => {
-            setSkillsList([...skillsList, { category: '', items: [] }]);
+            const updatedList = [...skillsList, { category: '', items: [] }];
+            setSkillsList(updatedList);
+            // Update context immediately for preview
+            setResumeInfo(prev => ({
+                  ...prev,
+                  skills: updatedList
+            }));
       };
 
       const updateCategory = (index, field, value) => {
@@ -29,81 +35,93 @@ const Skills = () => {
                   [field]: value
             };
             setSkillsList(updatedSkills);
-            setResumeInfo({
-                  ...resumeInfo,
+            // Update context immediately for preview
+            setResumeInfo(prev => ({
+                  ...prev,
                   skills: updatedSkills
-            });
+            }));
       };
 
       const addSkillItem = (categoryIndex) => {
             const updatedSkills = [...skillsList];
             updatedSkills[categoryIndex].items.push('');
             setSkillsList(updatedSkills);
-            setResumeInfo({
-                  ...resumeInfo,
+            // Update context immediately for preview
+            setResumeInfo(prev => ({
+                  ...prev,
                   skills: updatedSkills
-            });
+            }));
       };
 
       const updateSkillItem = (categoryIndex, itemIndex, value) => {
             const updatedSkills = [...skillsList];
             updatedSkills[categoryIndex].items[itemIndex] = value;
             setSkillsList(updatedSkills);
-            setResumeInfo({
-                  ...resumeInfo,
+            // Update context immediately for preview
+            setResumeInfo(prev => ({
+                  ...prev,
                   skills: updatedSkills
-            });
+            }));
       };
 
       const removeCategory = (index) => {
             const updatedSkills = skillsList.filter((_, i) => i !== index);
             setSkillsList(updatedSkills);
-            setResumeInfo({
-                  ...resumeInfo,
+            // Update context immediately for preview
+            setResumeInfo(prev => ({
+                  ...prev,
                   skills: updatedSkills
-            });
+            }));
       };
 
       const removeSkillItem = (categoryIndex, itemIndex) => {
             const updatedSkills = [...skillsList];
             updatedSkills[categoryIndex].items = updatedSkills[categoryIndex].items.filter((_, i) => i !== itemIndex);
             setSkillsList(updatedSkills);
-            setResumeInfo({
-                  ...resumeInfo,
+            // Update context immediately for preview
+            setResumeInfo(prev => ({
+                  ...prev,
                   skills: updatedSkills
-            });
+            }));
       };
 
-      const onSave = () => {
+      const onSave = async () => {
             setLoading(true);
-            
-            // Validate that all categories have at least one item
-            const isValid = skillsList.every(category => 
-                  category.category.trim() !== '' && 
-                  category.items.length > 0 && 
-                  category.items.every(item => item.trim() !== '')
-            );
+            try {
+                  // Validate that all categories have at least one item
+                  const isValid = skillsList.every(category => 
+                        category.category.trim() !== '' && 
+                        category.items.length > 0 && 
+                        category.items.every(item => item.trim() !== '')
+                  );
 
-            if (!isValid) {
-                  setLoading(false);
-                  toast('Please fill in all category names and add at least one skill to each category');
-                  return;
-            }
-
-            const data = {
-                  data: {
-                        skills: skillsList
+                  if (!isValid) {
+                        throw new Error('Please fill in all category names and add at least one skill to each category');
                   }
-            };
 
-            GlobalApi.updateResumeDetail(params.resumeId, data).then(resp => {
-                  console.log(resp);
+                  const data = {
+                        data: {
+                              skills: skillsList
+                        }
+                  };
+
+                  const response = await GlobalApi.updateResumeDetail(params.resumeId, data);
+                  if (response.data) {
+                        setResumeInfo(prev => ({
+                              ...prev,
+                              skills: skillsList
+                        }));
+                        enableNext(true);
+                        toast.success('Skills updated successfully!');
+                  } else {
+                        throw new Error('Failed to update skills');
+                  }
+            } catch (error) {
+                  console.error('Error updating skills:', error);
+                  toast.error(error.message || 'Failed to update skills');
+            } finally {
                   setLoading(false);
-                  toast('Skills updated successfully!');
-            }, (error) => {
-                  setLoading(false);
-                  toast('Server Error, Please try again!');
-            });
+            }
       }
 
       return (

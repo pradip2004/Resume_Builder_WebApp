@@ -46,23 +46,37 @@ function PersonalDetails({enableNext}) {
       ...prev,
       [name]: value
     }))
+    // Update context immediately for preview
+    setResumeInfo(prev => ({
+      ...prev,
+      [name]: value
+    }))
   }
 
-  const onSave = (e) => {
+  const onSave = async (e) => {
     e.preventDefault()
     setLoading(true);
-    const data = {
-      data: formData
-    }
-    GlobalApi.updateResumeDetail(params?.resumeId, data).then(res =>{
-      setResumeInfo(prev => ({
-        ...prev,
-        ...formData
-      }));
-      enableNext(true);
+    try {
+      const data = {
+        data: formData
+      }
+      const response = await GlobalApi.updateResumeDetail(params?.resumeId, data);
+      if (response.data) {
+        setResumeInfo(prev => ({
+          ...prev,
+          ...formData
+        }));
+        enableNext(true);
+        toast.success("Details updated successfully")
+      } else {
+        throw new Error('Failed to update details')
+      }
+    } catch (error) {
+      console.error('Error updating details:', error);
+      toast.error(error.message || 'Failed to update details')
+    } finally {
       setLoading(false);
-      toast("Detail updated successfully")
-    })
+    }
   }
 
   return (
@@ -110,7 +124,7 @@ function PersonalDetails({enableNext}) {
                 </div>
             </div>
             <div className='mt-3 flex justify-end'>
-                <Button type="submit">
+                <Button type="submit" disabled={loading}>
                     {loading?<LoaderCircle className='animate-spin' />:'Save'}
                 </Button>
             </div>
